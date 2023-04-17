@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { useQuery } from 'react-query'
 
-function App() {
+const App = () => {
+  const {isLoading, error, data} = useQuery({
+    queryKey : ['posts'],
+    queryFn : () =>
+    fetch("https://jsonplaceholder.typicode.com/posts").then(res => 
+    res.json(),
+    ),
+  })
+
+  if(isLoading) {
+    return '...Loading'
+  }
+
+  if (error) {
+    return 'Error in Fetching: ' + {error}
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <center>
+        <h1>React-Query  Hook</h1>
+        {console.log("data is", data)}
+        {
+          data.map(eachData => (
+            <div key = {eachData.id}>
+              <h3> {eachData.id} : {eachData.title}</h3>
+              </div>
+          ))
+        }
+      </center>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
